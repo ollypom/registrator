@@ -20,6 +20,7 @@ type RegistryAdapter interface {
 }
 
 type Config struct {
+	HostName        string
 	HostIp          string
 	Internal        bool
 	Explicit        bool

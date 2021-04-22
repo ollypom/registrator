@@ -252,9 +252,10 @@ func (b *Bridge) newService(port ServicePort, isgroup bool) *Service {
 
 	// not sure about this logic. kind of want to remove it.
 	hostname := Hostname
-	if hostname == "" {
-		hostname = port.HostIP
+	if b.config.HostName != "" {
+		hostname = b.config.HostName
 	}
+
 	if port.HostIP == "0.0.0.0" {
 		ip, err := net.ResolveIPAddr("ip", hostname)
 		if err == nil {

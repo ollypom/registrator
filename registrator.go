@@ -19,6 +19,7 @@ var Version string
 
 var versionChecker = usage.NewChecker("registrator", Version)
 
+var hostName = flag.String("hostname", "", "hostname of underlying container instance")
 var hostIp = flag.String("ip", "", "IP for ports mapped to the host")
 var internal = flag.Bool("internal", false, "Use internal ports instead of published ones")
 var explicit = flag.Bool("explicit", false, "Only register containers which have SERVICE_NAME label set")
@@ -72,6 +73,10 @@ func main() {
 		os.Exit(2)
 	}
 
+	if *hostName != "" {
+		log.Println("Forcing hostname to", *hostName)
+	}
+
 	if *hostIp != "" {
 		log.Println("Forcing host IP to", *hostIp)
 	}
@@ -103,6 +108,7 @@ func main() {
 	}
 
 	b, err := bridge.New(docker, flag.Arg(0), bridge.Config{
+        HostName:        *hostName,
 		HostIp:          *hostIp,
 		Internal:        *internal,
 		Explicit:        *explicit,

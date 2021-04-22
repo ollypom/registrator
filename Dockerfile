@@ -11,8 +11,14 @@ RUN \
 		-o bin/registrator \
 		.
 
-FROM alpine:3.7
-RUN apk add --no-cache ca-certificates
-COPY --from=builder /go/src/github.com/gliderlabs/registrator/bin/registrator /bin/registrator
+FROM alpine:3.11
 
-ENTRYPOINT ["/bin/registrator"]
+RUN apk add --no-cache \
+    ca-certificates \
+    curl \
+    jq
+
+COPY --from=builder /go/src/github.com/gliderlabs/registrator/bin/registrator /bin/registrator
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
